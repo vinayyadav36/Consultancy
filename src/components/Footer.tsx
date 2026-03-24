@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { Rocket, Mail, Phone, MapPin } from 'lucide-react';
 
@@ -14,7 +13,7 @@ const Footer = () => {
                 Shree Nandi Marketing Services
               </span>
             </Link>
-            <p className="mt-4 text-white-400">
+            <p className="mt-4 text-gray-400">
               Transforming businesses through innovative digital solutions.
             </p>
           </div>

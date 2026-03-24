@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  :root {
+    --accent: #34d399;
+  }
+
+  body {
+    @apply m-0 min-h-screen bg-gray-950 text-white antialiased;
+  }
+
+  #root {
+    @apply min-h-screen;
+  }
+}
+
 @layer components {
   .container {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;

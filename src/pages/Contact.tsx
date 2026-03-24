@@ -1,9 +1,19 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import L from 'leaflet';
 import { Mail, Phone, MapPin } from 'lucide-react';
-import { supabase } from '../lib/supabase';
+import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+import { isSupabaseConfigured, supabase } from '../lib/supabase';
 import 'leaflet/dist/leaflet.css';
+
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: markerIcon2x,
+  iconUrl: markerIcon,
+  shadowUrl: markerShadow,
+});
 
 const Contact = () => {
   const position: [number, number] = [40.7128, -74.0060];
@@ -12,10 +22,18 @@ const Contact = () => {
     email: '',
     message: ''
   });
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [status, setStatus] = useState<
+    'idle' | 'loading' | 'success' | 'error' | 'unavailable'
+  >('idle');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!supabase || !isSupabaseConfigured) {
+      setStatus('unavailable');
+      return;
+    }
+
     setStatus('loading');
 
     try {
@@ -108,7 +126,7 @@ const Contact = () => {
               </div>
               <button
                 type="submit"
-                disabled={status === 'loading'}
+                disabled={status === 'loading' || !isSupabaseConfigured}
                 className="btn btn-primary w-full disabled:opacity-50"
               >
                 {status === 'loading' ? 'Sending...' : 'Send Message'}
@@ -118,6 +136,11 @@ const Contact = () => {
               )}
               {status === 'error' && (
                 <p className="text-red-400 text-center">Error sending message. Please try again.</p>
+              )}
+              {status === 'unavailable' && (
+                <p className="text-yellow-400 text-center">
+                  Form submission is unavailable. Configure Supabase environment variables and retry.
+                </p>
               )}
             </form>
           </motion.div>
