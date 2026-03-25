@@ -7,6 +7,7 @@ import About from './pages/About';
 import Services from './pages/Services';
 import Contact from './pages/Contact';
 import Admin from './pages/Admin';
+import BusinessPlatform from './pages/BusinessPlatform';
 
 function App() {
   const isAdminEnabled = import.meta.env.VITE_ENABLE_ADMIN === 'true';
@@ -21,6 +22,7 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/services" element={<Services />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/business-platform" element={<BusinessPlatform />} />
             <Route
               path="/admin"
               element={isAdminEnabled ? <Admin /> : <Navigate to="/" replace />}

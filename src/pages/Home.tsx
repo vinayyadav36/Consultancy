@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { ArrowRight, BarChart, Globe, Users, Zap } from 'lucide-react';
+import { ArrowRight, BarChart, BarChart2, FileText, Globe, Megaphone, TrendingUp, Users, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import BrochureCard from '../components/BrochureCard';
 
 const Home = () => {
   const [ref, inView] = useInView({
@@ -98,6 +99,64 @@ const Home = () => {
                 <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
                 <p className="text-gray-400">{feature.description}</p>
               </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Brochure Cards Section */}
+      <section className="py-20 bg-[#111111]">
+        <div className="container">
+          <motion.div
+            initial="hidden"
+            animate={inView ? "visible" : "hidden"}
+            variants={fadeIn}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-4xl font-bold mb-4">Our Marketing Plans</h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">
+              Explore our tailored marketing plans designed to help your business thrive.
+              Click any card to view the full brochure.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              {
+                id: 'digital-growth',
+                title: 'Digital Growth Plan',
+                description:
+                  'Accelerate your online presence with SEO, paid search, and conversion optimisation.',
+                icon: <TrendingUp className="h-7 w-7 text-emerald-400" />,
+                highlight: 'Most Popular',
+              },
+              {
+                id: 'brand-identity',
+                title: 'Brand Identity Plan',
+                description:
+                  'Build a memorable brand with a complete visual and messaging framework.',
+                icon: <FileText className="h-7 w-7 text-emerald-400" />,
+                highlight: 'Foundation',
+              },
+              {
+                id: 'social-media',
+                title: 'Social Media Plan',
+                description:
+                  'Grow your following and engage your community across every major platform.',
+                icon: <Megaphone className="h-7 w-7 text-emerald-400" />,
+                highlight: 'High Engagement',
+              },
+              {
+                id: 'analytics-pro',
+                title: 'Analytics Pro Plan',
+                description:
+                  'Turn raw data into actionable insights with custom dashboards and reporting.',
+                icon: <BarChart2 className="h-7 w-7 text-emerald-400" />,
+                highlight: 'Data-Driven',
+              },
+            ].map((card) => (
+              <BrochureCard key={card.id} {...card} />
             ))}
           </div>
         </div>
