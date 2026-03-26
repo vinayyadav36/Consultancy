@@ -19,49 +19,49 @@ const Services = () => {
 
   const services = [
     {
-      icon: <Globe className="h-12 w-12 text-[--accent]" />,
+      icon: <Globe className="h-12 w-12 text-cyan-400" />,
       title: "Digital Marketing",
       description:
         "Comprehensive digital marketing strategies to boost your online presence and reach your target audience effectively.",
     },
     {
-      icon: <Code className="h-12 w-12 text-[--accent]" />,
+      icon: <Code className="h-12 w-12 text-cyan-400" />,
       title: "Web Development",
       description:
         "Custom website development solutions that are responsive, fast, and optimized for conversion.",
     },
     {
-      icon: <PenTool className="h-12 w-12 text-[--accent]" />,
+      icon: <PenTool className="h-12 w-12 text-cyan-400" />,
       title: "Brand Strategy",
       description:
         "Strategic brand development and positioning to help you stand out in your market.",
     },
     {
-      icon: <MessageSquare className="h-12 w-12 text-[--accent]" />,
+      icon: <MessageSquare className="h-12 w-12 text-cyan-400" />,
       title: "Social Media",
       description:
         "Engaging social media management and content creation to build your brand community.",
     },
     {
-      icon: <BarChart className="h-12 w-12 text-[--accent]" />,
+      icon: <BarChart className="h-12 w-12 text-cyan-400" />,
       title: "Analytics & Reports",
       description:
         "Data-driven insights and detailed reporting to track and improve your marketing ROI.",
     },
     {
-      icon: <Search className="h-12 w-12 text-[--accent]" />,
+      icon: <Search className="h-12 w-12 text-cyan-400" />,
       title: "SEO Optimization",
       description:
         "Search engine optimization to improve your visibility and organic traffic.",
     },
     {
-      icon: <Mail className="h-12 w-12 text-[--accent]" />,
+      icon: <Mail className="h-12 w-12 text-cyan-400" />,
       title: "Email Marketing",
       description:
         "Strategic email campaigns to nurture leads and maintain customer relationships.",
     },
     {
-      icon: <Camera className="h-12 w-12 text-[--accent]" />,
+      icon: <Camera className="h-12 w-12 text-cyan-400" />,
       title: "Content Creation",
       description:
         "High-quality content creation including videos, graphics, and written content.",

@@ -38,7 +38,7 @@ const About = () => {
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 bg-[#1a1a1a]" ref={ref}>
+      <section className="py-16 bg-[#0f0f1e]" ref={ref}>
         <div className="container">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
@@ -49,8 +49,8 @@ const About = () => {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 className="text-center"
               >
-                <div className="inline-block p-4 rounded-full bg-[#2a2a2a] mb-4">
-                  <div className="text-[--accent]">{stat.icon}</div>
+                <div className="inline-block p-4 rounded-full bg-[#1a1a2e] mb-4">
+                  <div className="text-cyan-400">{stat.icon}</div>
                 </div>
                 <div className="text-3xl font-bold mb-2">{stat.value}</div>
                 <div className="text-gray-400">{stat.label}</div>
@@ -106,7 +106,7 @@ const About = () => {
                   className="w-32 h-32 rounded-full mx-auto mb-4 object-cover"
                 />
                 <h3 className="text-xl font-semibold mb-2">{member.name}</h3>
-                <p className="text-[--accent]">{member.role}</p>
+                <p className="text-cyan-400">{member.role}</p>
               </motion.div>
             ))}
           </div>

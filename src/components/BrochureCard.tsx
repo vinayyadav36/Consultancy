@@ -19,7 +19,7 @@ const BrochureCard = ({ id, title, description, icon, highlight }: BrochureCardP
       anime({
         targets: cardRef.current,
         translateY: -8,
-        boxShadow: '0 12px 32px rgba(52, 211, 153, 0.2)',
+        boxShadow: '0 12px 32px rgba(34, 211, 238, 0.2)',
         duration: 300,
         easing: 'easeOutQuad',
       });
@@ -40,7 +40,7 @@ const BrochureCard = ({ id, title, description, icon, highlight }: BrochureCardP
       anime({
         targets: cardRef.current,
         translateY: 0,
-        boxShadow: '0 0px 0px rgba(52, 211, 153, 0)',
+        boxShadow: '0 0px 0px rgba(34, 211, 238, 0)',
         duration: 300,
         easing: 'easeOutQuad',
       });
@@ -57,28 +57,26 @@ const BrochureCard = ({ id, title, description, icon, highlight }: BrochureCardP
   };
 
   return (
-    <Link
-      to={`/business-platform?tab=brochure&id=${id}`}
-      className="block"
-    >
+    <Link to={`/business-platform?tab=brochure&id=${id}`} className="block">
       <div
         ref={cardRef}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className="service-card flex flex-col h-full cursor-pointer border border-transparent hover:border-emerald-400/30"
+        className="service-card flex flex-col h-full cursor-pointer"
       >
         <div
           ref={iconRef}
-          className="mb-4 inline-flex items-center justify-center w-14 h-14 rounded-full bg-emerald-400/10"
+          className="mb-4 inline-flex items-center justify-center w-14 h-14 rounded-full"
+          style={{ background: 'rgba(34,211,238,0.1)', border: '1px solid rgba(34,211,238,0.2)' }}
         >
           {icon}
         </div>
-        <span className="text-xs font-semibold text-emerald-400 uppercase tracking-widest mb-2">
+        <span className="text-xs font-semibold text-cyan-400 uppercase tracking-widest mb-2">
           {highlight}
         </span>
         <h3 className="text-xl font-semibold mb-3">{title}</h3>
         <p className="text-gray-400 flex-grow">{description}</p>
-        <div className="mt-4 text-emerald-400 text-sm font-medium flex items-center gap-1">
+        <div className="mt-4 text-cyan-400 text-sm font-medium flex items-center gap-1">
           View Brochure
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M5 12h14M12 5l7 7-7 7" />
@@ -90,3 +88,4 @@ const BrochureCard = ({ id, title, description, icon, highlight }: BrochureCardP
 };
 
 export default BrochureCard;
+

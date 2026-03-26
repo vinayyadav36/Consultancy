@@ -11,7 +11,7 @@ const brochures: Record<string, {
   'digital-growth': {
     title: 'Digital Growth Plan',
     subtitle: 'Accelerate your online presence with a tailored digital marketing roadmap.',
-    icon: <TrendingUp className="h-10 w-10 text-emerald-400" />,
+    icon: <TrendingUp className="h-10 w-10 text-cyan-400" />,
     sections: [
       {
         heading: 'Overview',
@@ -33,7 +33,7 @@ const brochures: Record<string, {
   'brand-identity': {
     title: 'Brand Identity Plan',
     subtitle: 'Build a memorable brand that resonates with your target audience.',
-    icon: <FileText className="h-10 w-10 text-emerald-400" />,
+    icon: <FileText className="h-10 w-10 text-cyan-400" />,
     sections: [
       {
         heading: 'Overview',
@@ -55,7 +55,7 @@ const brochures: Record<string, {
   'social-media': {
     title: 'Social Media Marketing Plan',
     subtitle: 'Engage your community and grow your following on every platform.',
-    icon: <Megaphone className="h-10 w-10 text-emerald-400" />,
+    icon: <Megaphone className="h-10 w-10 text-cyan-400" />,
     sections: [
       {
         heading: 'Overview',
@@ -77,7 +77,7 @@ const brochures: Record<string, {
   'analytics-pro': {
     title: 'Analytics Pro Plan',
     subtitle: 'Turn raw data into actionable insights that drive smarter decisions.',
-    icon: <BarChart2 className="h-10 w-10 text-emerald-400" />,
+    icon: <BarChart2 className="h-10 w-10 text-cyan-400" />,
     sections: [
       {
         heading: 'Overview',
@@ -125,7 +125,7 @@ const BusinessPlatform = () => {
               onClick={() => handleTabChange(t.id)}
               className={`px-4 py-2 text-sm font-medium rounded-t-lg transition-colors duration-200 ${
                 tab === t.id
-                  ? 'text-emerald-400 border-b-2 border-emerald-400'
+                  ? 'text-cyan-400 border-b-2 border-cyan-400'
                   : 'text-gray-400 hover:text-white'
               }`}
             >
@@ -143,7 +143,7 @@ const BusinessPlatform = () => {
           >
             {/* Brochure Header */}
             <div className="flex items-center gap-4 mb-8">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-400/10">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-cyan-400/10">
                 {brochure.icon}
               </div>
               <div>
@@ -162,7 +162,7 @@ const BusinessPlatform = () => {
                   transition={{ duration: 0.5, delay: i * 0.1 }}
                   className="service-card"
                 >
-                  <h3 className="text-lg font-semibold text-emerald-400 mb-3">
+                  <h3 className="text-lg font-semibold text-cyan-400 mb-3">
                     {section.heading}
                   </h3>
                   <p className="text-gray-400 leading-relaxed">{section.content}</p>
@@ -180,8 +180,8 @@ const BusinessPlatform = () => {
                     onClick={() => setSearchParams({ tab: 'brochure', id: planId })}
                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
                       planId === id
-                        ? 'bg-emerald-400 text-white'
-                        : 'bg-gray-900 text-gray-300 hover:bg-gray-800'
+                        ? 'bg-cyan-400 text-white'
+                        : 'bg-[#131328] text-gray-300 hover:bg-[#1a1a2e]'
                     }`}
                   >
                     {plan.title}
