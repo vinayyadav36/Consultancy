@@ -79,7 +79,7 @@ const Contact = () => {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="bg-gray-900 p-8 rounded-xl"
+            className="bg-[#131328] p-8 rounded-xl"
           >
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
@@ -91,7 +91,7 @@ const Contact = () => {
                   id="name"
                   value={formData.name}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 bg-gray-800 rounded-lg focus:ring-2 focus:ring-emerald-400 outline-none"
+                  className="w-full px-4 py-3 bg-[#1a1a2e] rounded-lg focus:ring-2 focus:ring-cyan-400 outline-none"
                   placeholder="Your name"
                   required
                 />
@@ -105,7 +105,7 @@ const Contact = () => {
                   id="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 bg-gray-800 rounded-lg focus:ring-2 focus:ring-emerald-400 outline-none"
+                  className="w-full px-4 py-3 bg-[#1a1a2e] rounded-lg focus:ring-2 focus:ring-cyan-400 outline-none"
                   placeholder="your@email.com"
                   required
                 />
@@ -119,7 +119,7 @@ const Contact = () => {
                   value={formData.message}
                   onChange={handleChange}
                   rows={6}
-                  className="w-full px-4 py-3 bg-gray-800 rounded-lg focus:ring-2 focus:ring-emerald-400 outline-none"
+                  className="w-full px-4 py-3 bg-[#1a1a2e] rounded-lg focus:ring-2 focus:ring-cyan-400 outline-none"
                   placeholder="Your message"
                   required
                 ></textarea>
@@ -132,7 +132,7 @@ const Contact = () => {
                 {status === 'loading' ? 'Sending...' : 'Send Message'}
               </button>
               {status === 'success' && (
-                <p className="text-emerald-400 text-center">Message sent successfully!</p>
+                <p className="text-cyan-400 text-center">Message sent successfully!</p>
               )}
               {status === 'error' && (
                 <p className="text-red-400 text-center">Error sending message. Please try again.</p>
@@ -154,15 +154,15 @@ const Contact = () => {
               <h3 className="text-xl font-semibold mb-6">Contact Information</h3>
               <div className="space-y-4">
                 <div className="flex items-center space-x-4">
-                  <Mail className="h-5 w-5 text-[--accent]" />
+                  <Mail className="h-5 w-5 text-cyan-400" />
                   <span>contact@digigrowth.com</span>
                 </div>
                 <div className="flex items-center space-x-4">
-                  <Phone className="h-5 w-5 text-[--accent]" />
+                  <Phone className="h-5 w-5 text-cyan-400" />
                   <span>+1 (555) 123-4567</span>
                 </div>
                 <div className="flex items-center space-x-4">
-                  <MapPin className="h-5 w-5 text-[--accent]" />
+                  <MapPin className="h-5 w-5 text-cyan-400" />
                   <span>123 Digital Ave, Tech City, NY 10001</span>
                 </div>
               </div>

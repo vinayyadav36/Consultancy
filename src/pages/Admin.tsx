@@ -128,14 +128,14 @@ const Admin = () => {
       )}
 
       {inquiries.length === 0 && (
-        <div className="rounded-xl border border-gray-800 bg-gray-900/50 p-6 text-gray-300">
+        <div className="rounded-xl border border-indigo-900/40 bg-[#131328]/50 p-6 text-gray-300">
           No inquiries found yet.
         </div>
       )}
       
       <div className="grid gap-6">
         {inquiries.map((inquiry) => (
-          <div key={inquiry.id} className="bg-gray-900 p-6 rounded-xl">
+          <div key={inquiry.id} className="bg-[#131328] p-6 rounded-xl">
             <div className="flex justify-between items-start mb-4">
               <div>
                 <h3 className="text-xl font-semibold">{inquiry.name}</h3>
@@ -155,7 +155,7 @@ const Admin = () => {
               <select
                 value={inquiry.status}
                 onChange={(e) => updateInquiryStatus(inquiry.id, e.target.value)}
-                className="bg-gray-800 rounded-lg px-4 py-2"
+                className="bg-[#1a1a2e] rounded-lg px-4 py-2"
               >
                 <option value="new">New</option>
                 <option value="in_progress">In Progress</option>
@@ -180,7 +180,7 @@ const Admin = () => {
                   [inquiry.id]: e.target.value,
                 }))
               }
-              className="w-full bg-gray-800 rounded-lg px-4 py-2 focus:ring-2 focus:ring-emerald-400 outline-none"
+              className="w-full bg-[#1a1a2e] rounded-lg px-4 py-2 focus:ring-2 focus:ring-cyan-400 outline-none"
               rows={3}
             />
 
