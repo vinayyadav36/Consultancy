@@ -1,6 +1,7 @@
 import { useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FileText, BarChart2, Megaphone, TrendingUp } from 'lucide-react';
+import WindowButtons from '../components/WindowButtons';
 
 const brochures: Record<string, {
   title: string;
@@ -115,97 +116,102 @@ const BusinessPlatform = () => {
   };
 
   return (
-    <div className="py-20">
+    <div className="py-12">
       <div className="container">
-        {/* Tabs */}
-        <div className="flex gap-4 mb-10 border-b border-gray-800 pb-2">
-          {TABS.map((t) => (
-            <button
-              key={t.id}
-              onClick={() => handleTabChange(t.id)}
-              className={`px-4 py-2 text-sm font-medium rounded-t-lg transition-colors duration-200 ${
-                tab === t.id
-                  ? 'text-cyan-400 border-b-2 border-cyan-400'
-                  : 'text-gray-400 hover:text-white'
-              }`}
-            >
-              {t.label}
-            </button>
-          ))}
-        </div>
-
-        {tab === 'brochure' && (
-          <motion.div
-            key={id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            {/* Brochure Header */}
-            <div className="flex items-center gap-4 mb-8">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-cyan-400/10">
-                {brochure.icon}
-              </div>
-              <div>
-                <h1 className="text-3xl md:text-4xl font-bold">{brochure.title}</h1>
-                <p className="text-gray-400 mt-1">{brochure.subtitle}</p>
-              </div>
-            </div>
-
-            {/* Brochure Sections */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {brochure.sections.map((section, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: i * 0.1 }}
-                  className="service-card"
+        <WindowButtons title="Shree Nandi · Business Platform">
+          <div className="p-6">
+            {/* Tabs */}
+            <div className="flex gap-4 mb-8 border-b pb-2" style={{ borderColor: 'rgba(49,46,129,0.5)' }}>
+              {TABS.map((t) => (
+                <button
+                  key={t.id}
+                  onClick={() => handleTabChange(t.id)}
+                  className={`px-4 py-2 text-sm font-medium rounded-t-lg transition-colors duration-200 ${
+                    tab === t.id
+                      ? 'text-cyan-400 border-b-2 border-cyan-400'
+                      : 'text-gray-400 hover:text-white'
+                  }`}
                 >
-                  <h3 className="text-lg font-semibold text-cyan-400 mb-3">
-                    {section.heading}
-                  </h3>
-                  <p className="text-gray-400 leading-relaxed">{section.content}</p>
-                </motion.div>
+                  {t.label}
+                </button>
               ))}
             </div>
 
-            {/* Select another plan */}
-            <div className="mt-12">
-              <h2 className="text-xl font-semibold mb-4">Explore Other Plans</h2>
-              <div className="flex flex-wrap gap-3">
-                {Object.entries(brochures).map(([planId, plan]) => (
-                  <button
-                    key={planId}
-                    onClick={() => setSearchParams({ tab: 'brochure', id: planId })}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
-                      planId === id
-                        ? 'bg-cyan-400 text-white'
-                        : 'bg-[#131328] text-gray-300 hover:bg-[#1a1a2e]'
-                    }`}
-                  >
-                    {plan.title}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-        )}
+            {tab === 'brochure' && (
+              <motion.div
+                key={id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                {/* Brochure Header */}
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-cyan-400/10">
+                    {brochure.icon}
+                  </div>
+                  <div>
+                    <h1 className="text-3xl md:text-4xl font-bold">{brochure.title}</h1>
+                    <p className="text-gray-400 mt-1">{brochure.subtitle}</p>
+                  </div>
+                </div>
 
-        {tab === 'overview' && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <h1 className="text-3xl md:text-4xl font-bold mb-6">Business Platform</h1>
-            <p className="text-gray-400 max-w-2xl leading-relaxed">
-              The Business Platform brings together all our marketing plans and tools in one
-              place. Browse our brochures, request a custom quote, and track campaign
-              performance — all from a single dashboard.
-            </p>
-          </motion.div>
-        )}
+                {/* Brochure Sections */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  {brochure.sections.map((section, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: i * 0.1 }}
+                      className="service-card"
+                    >
+                      <h3 className="text-lg font-semibold text-cyan-400 mb-3">
+                        {section.heading}
+                      </h3>
+                      <p className="text-gray-400 leading-relaxed">{section.content}</p>
+                    </motion.div>
+                  ))}
+                </div>
+
+                {/* Select another plan */}
+                <div className="mt-10">
+                  <h2 className="text-xl font-semibold mb-4">Explore Other Plans</h2>
+                  <div className="flex flex-wrap gap-3">
+                    {Object.entries(brochures).map(([planId, plan]) => (
+                      <button
+                        key={planId}
+                        onClick={() => setSearchParams({ tab: 'brochure', id: planId })}
+                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
+                          planId === id
+                            ? 'bg-cyan-400 text-[#0a0a14]'
+                            : 'text-gray-300 hover:text-white'
+                        }`}
+                        style={planId !== id ? { background: 'rgba(49,46,129,0.3)', border: '1px solid rgba(49,46,129,0.5)' } : undefined}
+                      >
+                        {plan.title}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            {tab === 'overview' && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <h1 className="text-3xl md:text-4xl font-bold mb-6">Business Platform</h1>
+                <p className="text-gray-400 max-w-2xl leading-relaxed">
+                  The Business Platform brings together all our marketing plans and tools in one
+                  place. Browse our brochures, request a custom quote, and track campaign
+                  performance — all from a single dashboard.
+                </p>
+              </motion.div>
+            )}
+          </div>
+        </WindowButtons>
       </div>
     </div>
   );
