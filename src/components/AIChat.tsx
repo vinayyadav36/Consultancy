@@ -42,9 +42,11 @@ function getFallbackResponse(userMessage: string): string {
   return FALLBACK_RESPONSES.default;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare global {
-  interface Window { SpeechRecognition: any; webkitSpeechRecognition: any; }
+  interface Window {
+    SpeechRecognition: new () => SpeechRecognition;
+    webkitSpeechRecognition: new () => SpeechRecognition;
+  }
   // Web Speech API types
   interface SpeechRecognitionEvent extends Event {
     readonly results: SpeechRecognitionResultList;
