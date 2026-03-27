@@ -1,9 +1,10 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import AIChat from './components/AIChat';
+import ErrorBoundary from './components/ErrorBoundary';
 import Home from './pages/Home';
 import About from './pages/About';
 import Services from './pages/Services';
@@ -23,34 +24,54 @@ const PageLoader = () => (
   </div>
 );
 
+// Tracks page visits on every route change
+function VisitorTracker() {
+  const location = useLocation();
+  useEffect(() => {
+    const apiBase = import.meta.env.VITE_API_BASE;
+    if (!apiBase) return;
+    fetch(`${apiBase}/api/visit`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ path: location.pathname }),
+    }).catch(() => undefined);
+  }, [location.pathname]);
+  return null;
+}
+
 function App() {
   const isAdminEnabled = import.meta.env.VITE_ENABLE_ADMIN === 'true';
 
   return (
-    <Router>
-      <div className="min-h-screen flex flex-col">
-        <Navbar />
-        <main className="flex-grow">
-          <Suspense fallback={<PageLoader />}>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/services" element={<Services />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/business-platform" element={<BusinessPlatform />} />
-              <Route path="/certifications" element={<Certifications />} />
-              <Route path="/checkout" element={<Checkout />} />
-              <Route
-                path="/admin"
-                element={isAdminEnabled ? <Admin /> : <Navigate to="/" replace />}
-              />
-            </Routes>
-          </Suspense>
-        </main>
-        <Footer />
-        <AIChat />
-      </div>
-    </Router>
+    <ErrorBoundary>
+      <Router>
+        <VisitorTracker />
+        <div className="min-h-screen flex flex-col">
+          <Navbar />
+          <main className="flex-grow">
+            <ErrorBoundary>
+              <Suspense fallback={<PageLoader />}>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/services" element={<Services />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/business-platform" element={<BusinessPlatform />} />
+                  <Route path="/certifications" element={<Certifications />} />
+                  <Route path="/checkout" element={<Checkout />} />
+                  <Route
+                    path="/admin"
+                    element={isAdminEnabled ? <Admin /> : <Navigate to="/" replace />}
+                  />
+                </Routes>
+              </Suspense>
+            </ErrorBoundary>
+          </main>
+          <Footer />
+          <AIChat />
+        </div>
+      </Router>
+    </ErrorBoundary>
   );
 }
 
