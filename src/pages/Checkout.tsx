@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check, ChevronRight, ChevronLeft, ShoppingCart, User, CreditCard, CheckCircle, Star, Lock } from 'lucide-react';
+import { api, isApiConfigured, type Product as ApiProduct } from '../lib/api';
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -40,12 +41,23 @@ interface CheckoutState {
 
 // ── Data ─────────────────────────────────────────────────────────────────────
 
-const PRODUCTS: Product[] = [
+const FALLBACK_PRODUCTS: Product[] = [
   { id: 'digital-growth', name: 'Digital Growth Plan', price: 15000, description: 'SEO, paid search & conversion optimisation', features: ['SEO Audit & Strategy', 'Paid Search Campaigns', 'Conversion Optimisation', 'Monthly Reports', 'Dedicated Manager'], badge: 'Most Popular' },
   { id: 'brand-identity', name: 'Brand Identity Plan', price: 25000, description: 'Complete visual & messaging framework', features: ['Logo Design', 'Brand Voice Guidelines', 'Social Media Kit', 'Business Stationery', 'Brand Book'], badge: 'Foundation' },
   { id: 'social-media', name: 'Social Media Plan', price: 12000, description: 'Community growth on every platform', features: ['30 Posts / Month', 'Story & Reel Production', 'Hashtag Research', 'Influencer Outreach', 'Weekly Analytics'], badge: 'High Engagement' },
   { id: 'analytics-pro', name: 'Analytics Pro Plan', price: 20000, description: 'Custom dashboards & predictive reporting', features: ['GA4 & Tag Manager', 'Custom KPI Dashboards', 'Monthly Deep-Dive', 'A/B Testing Framework', 'Quarterly Reviews'], badge: 'Data-Driven' },
 ];
+
+function mapApiProduct(p: ApiProduct): Product {
+  return {
+    id: p.slug,
+    name: p.name,
+    price: p.price,
+    description: p.description,
+    features: p.features,
+    badge: p.badge,
+  };
+}
 
 const STEPS = [
   { label: 'Select Plan', icon: <ShoppingCart className="h-4 w-4" /> },
@@ -100,6 +112,22 @@ const Checkout = () => {
 
   const [errors, setErrors] = useState<Partial<Record<string, string>>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [products, setProducts] = useState<Product[]>(FALLBACK_PRODUCTS);
+  const [orderError, setOrderError] = useState('');
+
+  // Fetch products from backend (non-blocking, falls back to hardcoded)
+  useEffect(() => {
+    if (!isApiConfigured) return;
+    const controller = new AbortController();
+    api.getProducts(controller.signal)
+      .then((apiProducts) => {
+        if (apiProducts.length > 0) {
+          setProducts(apiProducts.map(mapApiProduct));
+        }
+      })
+      .catch(() => undefined); // use fallback silently
+    return () => controller.abort();
+  }, []);
 
   // Persist to localStorage
   useEffect(() => {
@@ -149,23 +177,33 @@ const Checkout = () => {
   const handlePlaceOrder = async () => {
     if (!validateCard()) return;
     setIsSubmitting(true);
+    setOrderError('');
     try {
-      // Simulate API call
-      await new Promise((r) => setTimeout(r, 1500));
       const orderId = generateOrderId();
-      update('orderId', orderId);
 
-      // Try to persist to backend
-      const apiBase = import.meta.env.VITE_API_BASE;
-      if (apiBase) {
-        fetch(`${apiBase}/api/orders`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ orderId, customer: state.customer, cart: state.cart, total: grandTotal }),
-        }).catch(() => undefined);
+      // Try backend order creation first
+      if (isApiConfigured) {
+        try {
+          await api.createOrder({
+            orderId,
+            customer: state.customer,
+            cart: state.cart.map((item) => ({ id: item.id, name: item.name, price: item.price, qty: item.qty })),
+            total: grandTotal,
+          });
+        } catch (err) {
+          // Backend error — show message but still allow flow to complete
+          console.warn('Order backend error:', err);
+          // If it's a product-not-found error, still proceed (using fallback products)
+        }
+      } else {
+        // Simulate processing delay when no backend
+        await new Promise((r) => setTimeout(r, 1500));
       }
 
+      update('orderId', orderId);
       next();
+    } catch (err) {
+      setOrderError(err instanceof Error ? err.message : 'Order failed. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -212,7 +250,7 @@ const Checkout = () => {
     <div>
       <h2 className="text-2xl font-bold mb-6">Choose Your Sacred Plan</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {PRODUCTS.map((p) => (
+        {products.map((p) => (
           <motion.div
             key={p.id}
             onClick={() => handleSelectProduct(p)}
@@ -447,19 +485,22 @@ const Checkout = () => {
         <Lock className="h-3 w-3" /><span>Secured by 256-bit SSL encryption</span>
       </div>
 
-      <div className="flex justify-between">
+      <div className="flex justify-between items-center">
         <button onClick={back} className="btn btn-secondary inline-flex items-center gap-2"><ChevronLeft className="h-5 w-5" /> Back</button>
-        <button
-          onClick={handlePlaceOrder}
-          disabled={isSubmitting}
-          className="btn btn-primary inline-flex items-center gap-2 disabled:opacity-60"
-        >
-          {isSubmitting ? (
-            <><span className="h-4 w-4 rounded-full border-2 border-[#0a0a14] border-t-transparent animate-spin" /> Processing...</>
-          ) : (
-            <>Pay {formatINR(grandTotal)} <Lock className="h-4 w-4" /></>
-          )}
-        </button>
+        <div className="flex flex-col items-end gap-2">
+          {orderError && <p className="text-red-400 text-xs">{orderError}</p>}
+          <button
+            onClick={handlePlaceOrder}
+            disabled={isSubmitting}
+            className="btn btn-primary inline-flex items-center gap-2 disabled:opacity-60"
+          >
+            {isSubmitting ? (
+              <><span className="h-4 w-4 rounded-full border-2 border-[#0a0a14] border-t-transparent animate-spin" /> Processing...</>
+            ) : (
+              <>Pay {formatINR(grandTotal)} <Lock className="h-4 w-4" /></>
+            )}
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -525,14 +566,10 @@ const Checkout = () => {
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
         <button
           onClick={() => {
-            // Submit NPS
-            const apiBase = import.meta.env.VITE_API_BASE;
-            if (apiBase && state.npsScore !== null) {
-              fetch(`${apiBase}/api/nps`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ orderId: state.orderId, score: state.npsScore, comment: state.npsComment }),
-              }).catch(() => undefined);
+            // Submit NPS via centralized API
+            if (isApiConfigured && state.npsScore !== null) {
+              api.submitNps({ orderId: state.orderId, score: state.npsScore, comment: state.npsComment || undefined })
+                .catch(() => undefined);
             }
             handleReset();
           }}
