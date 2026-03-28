@@ -245,7 +245,7 @@ const Home = () => {
             {/* Trust indicators */}
             <div className="mt-12 flex flex-wrap justify-center gap-6 text-sm text-gray-500">
               {['🔒 SSL Secured', '🏆 Award Winning', '⭐ 98% Satisfaction', '📞 24/7 Support', '🇮🇳 Made in India'].map((item) => (
-                <span key={item} className="flex items-center gap-1.5">{item}</span>
+                <span key={item} className="flex items-center gap-1.5" aria-label={item.replace(/[^\w\s]/g, '').trim()}>{item}</span>
               ))}
             </div>
           </motion.div>

@@ -203,7 +203,7 @@ const Checkout = () => {
       update('orderId', orderId);
       next();
     } catch (err) {
-      setOrderError(err instanceof Error ? err.message : 'Order failed. Please try again.');
+      setOrderError(err instanceof Error ? err.message : 'Unable to process your order. Please check your connection and try again, or contact us at +91 9992021159.');
     } finally {
       setIsSubmitting(false);
     }

@@ -31,14 +31,14 @@ async function request<T>(
     const err = await res.json().catch(() => ({ error: res.statusText })) as { error?: string };
     throw new Error(err.error || `HTTP ${res.status}`);
   }
-  if (res.status === 204) return undefined as T;
+  if (res.status === 204) return undefined as unknown as T;
   return res.json() as Promise<T>;
 }
 
 const get = <T>(path: string, signal?: AbortSignal) => request<T>('GET', path, undefined, signal);
 const post = <T>(path: string, body: unknown) => request<T>('POST', path, body);
 const put = <T>(path: string, body: unknown) => request<T>('PUT', path, body);
-const del = <T>(path: string) => request<T>('DELETE', path);
+const del = (path: string) => request<void>('DELETE', path);
 
 // ── API methods ───────────────────────────────────────────────────────────────
 
@@ -140,7 +140,7 @@ export const api = {
     post<Product>('/api/admin/products', data),
   adminUpdateProduct: (id: string, data: Partial<Product>) =>
     put<Product>(`/api/admin/products/${id}`, data),
-  adminDeleteProduct: (id: string) => del<void>(`/api/admin/products/${id}`),
+  adminDeleteProduct: (id: string) => del(`/api/admin/products/${id}`),
 };
 
 export default api;

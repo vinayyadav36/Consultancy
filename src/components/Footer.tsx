@@ -57,7 +57,8 @@ const Footer = () => {
   const handleNewsletterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newsletterEmail) return;
-    // In production this would call an API
+    // TODO: Integrate with email marketing API (e.g. Mailchimp, SendGrid) via backend endpoint
+    // e.g.: api.subscribeNewsletter(newsletterEmail).catch(() => undefined);
     setNewsletterStatus('success');
     setNewsletterEmail('');
     setTimeout(() => setNewsletterStatus('idle'), 4000);
