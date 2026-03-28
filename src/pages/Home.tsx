@@ -36,17 +36,6 @@ const Home = () => {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
 
   useEffect(() => {
-    const registered = sessionStorage.getItem('visit_registered');
-    if (!registered) {
-      sessionStorage.setItem('visit_registered', '1');
-      const apiBase = import.meta.env.VITE_API_BASE;
-      if (apiBase) {
-        fetch(`${apiBase}/api/visit`, { method: 'POST' }).catch(() => undefined);
-      }
-    }
-  }, []);
-
-  useEffect(() => {
     const container = particlesRef.current;
     if (!container) return;
     const particles: HTMLDivElement[] = [];
@@ -253,7 +242,48 @@ const Home = () => {
                 Schedule Consultation
               </Link>
             </div>
+            {/* Trust indicators */}
+            <div className="mt-12 flex flex-wrap justify-center gap-6 text-sm text-gray-500">
+              {['🔒 SSL Secured', '🏆 Award Winning', '⭐ 98% Satisfaction', '📞 24/7 Support', '🇮🇳 Made in India'].map((item) => (
+                <span key={item} className="flex items-center gap-1.5" aria-label={item.replace(/[^\w\s]/g, '').trim()}>{item}</span>
+              ))}
+            </div>
           </motion.div>
+        </div>
+      </section>
+
+      {/* How It Works */}
+      <section className="py-20">
+        <div className="container">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn} className="text-center mb-14">
+            <div className="trident-divider"><span className="text-2xl text-cyan-400 opacity-50">᛭</span></div>
+            <h2 className="text-4xl font-bold mb-4">How We <span className="text-cyan-400">Work</span></h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">
+              Our sacred 4-step process transforms your vision into measurable digital success.
+            </p>
+          </motion.div>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
+            {[
+              { step: '01', title: 'Discovery', desc: 'Deep dive into your business, goals, and competitive landscape to craft your divine strategy.', icon: '🔍' },
+              { step: '02', title: 'Strategy', desc: 'We craft a data-driven cosmic marketing blueprint aligned with your business destiny.', icon: '📋' },
+              { step: '03', title: 'Execution', desc: 'Our expert team launches campaigns with precision, creativity, and relentless focus.', icon: '🚀' },
+              { step: '04', title: 'Optimise', desc: 'Continuous measurement, learning, and refinement to maximise your ROI every month.', icon: '📈' },
+            ].map((item, i) => (
+              <motion.div
+                key={item.step}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.15 }}
+                className="service-card text-center relative"
+              >
+                <div className="text-4xl mb-4">{item.icon}</div>
+                <div className="text-5xl font-bold text-cyan-400/20 absolute top-4 right-4">{item.step}</div>
+                <h3 className="text-xl font-semibold mb-2 text-cyan-400">{item.title}</h3>
+                <p className="text-gray-400 text-sm leading-relaxed">{item.desc}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
     </div>

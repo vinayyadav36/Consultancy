@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
-import { Mail, Phone, MapPin, Clock } from 'lucide-react';
+import { Mail, Phone, MapPin, Clock, MessageCircleMore } from 'lucide-react';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 import { isSupabaseConfigured, supabase } from '../lib/supabase';
+import { api, isApiConfigured } from '../lib/api';
 import 'leaflet/dist/leaflet.css';
 
 L.Icon.Default.mergeOptions({
@@ -30,27 +31,37 @@ const Contact = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!supabase || !isSupabaseConfigured) {
-      setStatus('unavailable');
-      return;
-    }
-
     setStatus('loading');
 
-    try {
-      const { error } = await supabase
-        .from('inquiries')
-        .insert([formData]);
-
-      if (error) throw error;
-
-      setStatus('success');
-      setFormData({ name: '', email: '', message: '' });
-    } catch (error) {
-      console.error('Error submitting form:', error);
-      setStatus('error');
+    // Try backend API first
+    if (isApiConfigured) {
+      try {
+        await api.contact(formData);
+        setStatus('success');
+        setFormData({ name: '', email: '', message: '' });
+        return;
+      } catch (err) {
+        console.warn('Backend contact failed, trying Supabase:', err);
+      }
     }
+
+    // Fall back to Supabase
+    if (supabase && isSupabaseConfigured) {
+      try {
+        const { error } = await supabase.from('inquiries').insert([formData]);
+        if (error) throw error;
+        setStatus('success');
+        setFormData({ name: '', email: '', message: '' });
+        return;
+      } catch (error) {
+        console.error('Error submitting form:', error);
+        setStatus('error');
+        return;
+      }
+    }
+
+    // Neither available
+    setStatus('unavailable');
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -210,6 +221,23 @@ const Contact = () => {
                       <div className="text-xs text-gray-500 uppercase tracking-widest mb-1">Phone</div>
                       <a href="tel:+919992021159" className="text-gray-200 hover:text-cyan-400 transition-colors">
                         +91 9992021159
+                      </a>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-4">
+                    <div className="mt-0.5 flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center"
+                      style={{ background: 'rgba(37,211,102,0.1)', border: '1px solid rgba(37,211,102,0.3)' }}>
+                      <MessageCircleMore className="h-5 w-5 text-green-400" />
+                    </div>
+                    <div>
+                      <div className="text-xs text-gray-500 uppercase tracking-widest mb-1">WhatsApp</div>
+                      <a
+                        href="https://wa.me/919992021159?text=Hello%2C%20I%20am%20interested%20in%20your%20marketing%20services."
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gray-200 hover:text-green-400 transition-colors"
+                      >
+                        Chat with us on WhatsApp
                       </a>
                     </div>
                   </li>
