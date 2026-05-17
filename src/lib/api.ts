@@ -47,25 +47,36 @@ export interface Service {
   category: 'ecommerce_ops' | 'marketing' | 'branding' | 'ai_automation' | 'compliance';
   short_description: string;
   detailed_description: string;
+  narrative_problem: string;
+  narrative_transformation: string;
+  narrative_deliverables: string[];
+  prestige_indicator: string;
   ideal_client: string;
   starting_price_inr: number;
   delivery_timeframe: string;
   highlights: string[];
   is_featured: boolean;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface Testimonial {
   id: string;
   client_name: string;
   company: string;
+  sector: string;
   project_type: string;
   quote: string;
   result_summary: string;
+  deliverables: string[];
   metrics: {
     leads_increase_percent: number | null;
     revenue_increase_percent: number | null;
   };
   featured: boolean;
+  approval_status: 'pending' | 'approved' | 'archived';
+  created_at: string;
+  updated_at: string;
 }
 
 export interface Inquiry {
@@ -147,4 +158,10 @@ export const api = {
     request<StrategyRecommendationResponse>('POST', '/api/strategy/recommend', payload),
   adminInsights: () => request<AdminInsights>('GET', '/api/admin/insights'),
   adminExport: () => request<Record<string, unknown>>('GET', '/api/admin/export'),
+  adminServices: () => request<Service[]>('GET', '/api/admin/services'),
+  adminUpdateService: (id: string, data: Partial<Pick<Service, 'short_description' | 'detailed_description' | 'narrative_problem' | 'narrative_transformation' | 'narrative_deliverables' | 'prestige_indicator'>>) =>
+    request<{ success: boolean; service: Service }>('PATCH', `/api/admin/services/${id}`, data),
+  adminTestimonials: () => request<Testimonial[]>('GET', '/api/admin/testimonials'),
+  adminUpdateTestimonial: (id: string, data: Partial<Pick<Testimonial, 'quote' | 'result_summary' | 'approval_status'>>) =>
+    request<{ success: boolean; testimonial: Testimonial }>('PATCH', `/api/admin/testimonials/${id}`, data),
 };

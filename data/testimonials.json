@@ -4,40 +4,67 @@
       "id": "ts-1",
       "client_name": "Ankit Verma",
       "company": "Urban Stationery Co.",
+      "sector": "Retail stationery",
       "project_type": "Marketplace launch",
       "quote": "We went from no online presence to consistent daily orders with a practical plan we could actually execute.",
       "result_summary": "From 0 to first 100 online orders in 30 days.",
+      "deliverables": [
+        "Marketplace setup",
+        "Listing strategy",
+        "Performance dashboard"
+      ],
       "metrics": {
         "leads_increase_percent": 45,
         "revenue_increase_percent": 28
       },
-      "featured": true
+      "featured": true,
+      "approval_status": "approved",
+      "created_at": "2026-01-01T00:00:00.000Z",
+      "updated_at": "2026-01-01T00:00:00.000Z"
     },
     {
       "id": "ts-2",
       "client_name": "Neha Saini",
       "company": "Pure Organics",
+      "sector": "Organic foods",
       "project_type": "Compliance + operations",
       "quote": "GST and FSSAI paperwork stopped being a blocker, and we finally focused on selling.",
       "result_summary": "Compliance documentation sorted and storefront operations stabilized.",
+      "deliverables": [
+        "Compliance checklist",
+        "Operational SOPs",
+        "Storefront process cleanup"
+      ],
       "metrics": {
         "leads_increase_percent": null,
         "revenue_increase_percent": 22
       },
-      "featured": true
+      "featured": true,
+      "approval_status": "approved",
+      "created_at": "2026-01-01T00:00:00.000Z",
+      "updated_at": "2026-01-01T00:00:00.000Z"
     },
     {
       "id": "ts-3",
       "client_name": "Rohit Bansal",
       "company": "Campus Craft",
+      "sector": "Education commerce",
       "project_type": "Brand + growth setup",
       "quote": "We started as a side project and became a structured, operational brand with clear marketing systems.",
       "result_summary": "Student-founder project transitioned into a registered and operational brand.",
+      "deliverables": [
+        "Positioning framework",
+        "Lead-generation funnel",
+        "Execution cadence plan"
+      ],
       "metrics": {
         "leads_increase_percent": 38,
         "revenue_increase_percent": 30
       },
-      "featured": true
+      "featured": true,
+      "approval_status": "approved",
+      "created_at": "2026-01-01T00:00:00.000Z",
+      "updated_at": "2026-01-01T00:00:00.000Z"
     }
   ]
 }

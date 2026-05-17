@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { LogOut, RefreshCw, Search, Inbox, Clock, CheckCircle, Mail, Phone, User, Building2, Download, BrainCircuit } from 'lucide-react';
-import { api, type AdminInsights, type Inquiry } from '../lib/api';
+import { api, type AdminInsights, type Inquiry, type Service, type Testimonial } from '../lib/api';
 
 const LS_TOKEN = 'snma_admin_token';
 
@@ -16,6 +16,8 @@ const Admin = () => {
   const [filter, setFilter] = useState<'all' | Inquiry['status']>('all');
   const [search, setSearch] = useState('');
   const [insights, setInsights] = useState<AdminInsights | null>(null);
+  const [services, setServices] = useState<Service[]>([]);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
 
   const loadInquiries = async () => {
     setLoading(true);
@@ -25,6 +27,9 @@ const Admin = () => {
       setInquiries(data);
       const insightData = await api.adminInsights();
       setInsights(insightData);
+      const [serviceData, testimonialData] = await Promise.all([api.adminServices(), api.adminTestimonials()]);
+      setServices(serviceData);
+      setTestimonials(testimonialData);
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to load inquiries';
       setError(message);
@@ -79,6 +84,28 @@ const Admin = () => {
       URL.revokeObjectURL(url);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Export failed');
+    }
+  };
+
+  const saveService = async (service: Service) => {
+    try {
+      await api.adminUpdateService(service.id, {
+        narrative_problem: service.narrative_problem,
+        narrative_transformation: service.narrative_transformation,
+        prestige_indicator: service.prestige_indicator,
+      });
+      await loadInquiries();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Service update failed');
+    }
+  };
+
+  const updateTestimonialStatus = async (id: string, approval_status: Testimonial['approval_status']) => {
+    try {
+      await api.adminUpdateTestimonial(id, { approval_status });
+      await loadInquiries();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Testimonial update failed');
     }
   };
 
@@ -258,6 +285,48 @@ const Admin = () => {
       {error && (
         <div className="mb-4 text-sm text-red-400 bg-red-500/10 rounded-xl px-4 py-3">{error}</div>
       )}
+
+      <div className="grid gap-4 md:grid-cols-2 mb-6">
+        <div className="glass-card p-4">
+          <h3 className="text-sm font-semibold text-white mb-3">Service Narrative Controls</h3>
+          <div className="space-y-3 max-h-80 overflow-auto pr-1">
+            {services.map((service) => (
+              <div key={service.id} className="rounded-xl border border-white/10 bg-white/5 p-3 space-y-2">
+                <p className="text-sm text-white font-medium">{service.name}</p>
+                <input
+                  className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs text-white"
+                  value={service.prestige_indicator}
+                  onChange={(e) => setServices((cur) => cur.map((s) => s.id === service.id ? { ...s, prestige_indicator: e.target.value } : s))}
+                />
+                <button type="button" className="btn btn-secondary text-xs px-3 py-2 w-full" onClick={() => void saveService(service)}>
+                  Save narrative
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="glass-card p-4">
+          <h3 className="text-sm font-semibold text-white mb-3">Testimonial Approval Queue</h3>
+          <div className="space-y-3 max-h-80 overflow-auto pr-1">
+            {testimonials.map((item) => (
+              <div key={item.id} className="rounded-xl border border-white/10 bg-white/5 p-3">
+                <p className="text-sm text-white font-medium">{item.client_name} · {item.company}</p>
+                <p className="text-xs text-slate-400 mt-1 line-clamp-2">{item.quote}</p>
+                <select
+                  className="mt-2 w-full rounded-lg border border-white/10 bg-white/5 px-2 py-2 text-xs text-white"
+                  value={item.approval_status}
+                  onChange={(e) => void updateTestimonialStatus(item.id, e.target.value as Testimonial['approval_status'])}
+                >
+                  <option value="pending">Pending</option>
+                  <option value="approved">Approved</option>
+                  <option value="archived">Archived</option>
+                </select>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
 
       <div className="space-y-4">
         {visibleInquiries.map((inquiry) => (

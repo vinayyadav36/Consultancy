@@ -93,15 +93,29 @@ const Home = () => {
     <div>
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/5 via-transparent to-transparent pointer-events-none" />
-        <div className="absolute top-20 left-1/4 w-96 h-96 bg-violet-500/10 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute top-40 right-1/4 w-80 h-80 bg-cyan-500/10 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute top-20 left-1/4 w-96 h-96 bg-violet-500/15 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute top-40 right-1/4 w-80 h-80 bg-amber-400/10 rounded-full blur-[100px] pointer-events-none" />
 
         <div className="container relative pt-16 pb-12 md:pt-24 md:pb-20">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-400/10 border border-cyan-400/20 text-xs text-cyan-300 mb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-400/10 border border-amber-300/30 text-xs text-amber-200 mb-6">
               <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-              Rewari, Haryana — Serving India-wide
+              Private Growth Advisory · Rewari, India
             </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.05 }}
+            className="mb-6"
+          >
+            <svg width="72" height="72" viewBox="0 0 72 72" fill="none" aria-label="Shri Nandi Crest">
+              <circle cx="36" cy="36" r="35" stroke="rgba(250,204,21,0.45)" />
+              <path d="M18 46L36 16L54 46" stroke="rgba(250,204,21,0.9)" strokeWidth="2.5" />
+              <circle cx="36" cy="36" r="9" fill="rgba(250,204,21,0.18)" stroke="rgba(250,204,21,0.8)" />
+              <path d="M28 51H44" stroke="rgba(250,204,21,0.9)" strokeWidth="2" />
+            </svg>
           </motion.div>
 
           <motion.h1
@@ -110,8 +124,8 @@ const Home = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-4xl md:text-6xl lg:text-7xl font-bold max-w-4xl leading-[1.1] tracking-tight"
           >
-            We turn small brands into{' '}
-            <span className="glow-text">serious businesses</span>
+            We build market presence that{' '}
+            <span className="glow-text">looks inevitable</span>
           </motion.h1>
 
           <motion.p
@@ -120,8 +134,8 @@ const Home = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="mt-6 text-lg md:text-xl text-slate-300 max-w-2xl leading-relaxed"
           >
-            Shri Nandi Marketing Agency combines digital marketing, e-commerce operations, 
-            GST & FSSAI compliance, and AI-powered systems so your business grows without chaos.
+            Shri Nandi is a high-trust growth partner for ambitious brands — uniting authority-led branding,
+            performance systems, and operational governance in one premium execution model.
           </motion.p>
 
           <motion.div
@@ -131,7 +145,7 @@ const Home = () => {
             className="mt-8 flex flex-col sm:flex-row gap-3"
           >
             <Link to="/contact" className="btn btn-primary gap-2">
-              Free 20-min consultation <ArrowRight className="w-4 h-4" />
+              Apply for a strategy brief <ArrowRight className="w-4 h-4" />
             </Link>
             <a
               href="https://wa.me/918930609914"

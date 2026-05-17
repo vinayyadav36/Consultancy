@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Target, Lightbulb, Shield, TrendingUp, ArrowRight, CheckCircle } from 'lucide-react';
@@ -24,6 +25,15 @@ const fadeUp = {
 };
 
 const About = () => {
+  const [activeCert, setActiveCert] = useState(0);
+  const certifications = [
+    { title: 'Marketing Systems', year: '2022', x: 12, y: 78 },
+    { title: 'E-commerce Ops', year: '2023', x: 32, y: 56 },
+    { title: 'Compliance Stack', year: '2024', x: 54, y: 42 },
+    { title: 'AI Automation', year: '2025', x: 74, y: 26 },
+    { title: 'Growth Intelligence', year: '2026', x: 88, y: 12 },
+  ];
+
   return (
     <div>
       <section className="relative overflow-hidden">
@@ -112,6 +122,58 @@ const About = () => {
               </article>
             );
           })}
+        </div>
+      </motion.section>
+
+      <motion.section {...fadeUp} className="container py-12">
+        <div className="glass-card p-8 md:p-10">
+          <div className="flex flex-wrap items-end justify-between gap-3 mb-6">
+            <div>
+              <h2 className="text-2xl md:text-3xl font-bold">Certification Node Tree</h2>
+              <p className="text-sm text-slate-400 mt-1">Click any node to light up the progression path.</p>
+            </div>
+            <p className="text-xs text-violet-300">{certifications[activeCert]?.title} · {certifications[activeCert]?.year}</p>
+          </div>
+
+          <div className="relative rounded-2xl border border-white/10 bg-[#0e1020] p-5">
+            <svg viewBox="0 0 100 90" className="w-full h-52 md:h-64">
+              {certifications.slice(0, -1).map((cert, idx) => (
+                <line
+                  key={`${cert.title}-line`}
+                  x1={cert.x}
+                  y1={cert.y}
+                  x2={certifications[idx + 1].x}
+                  y2={certifications[idx + 1].y}
+                  stroke={idx < activeCert ? 'rgba(196,181,253,0.95)' : 'rgba(148,163,184,0.3)'}
+                  strokeWidth="1.4"
+                  strokeDasharray={idx < activeCert ? '0' : '3 3'}
+                />
+              ))}
+              {certifications.map((cert, idx) => (
+                <g key={cert.title}>
+                  <motion.circle
+                    cx={cert.x}
+                    cy={cert.y}
+                    r={idx === activeCert ? 4.1 : 3.3}
+                    fill={idx <= activeCert ? 'rgba(250,204,21,0.95)' : 'rgba(100,116,139,0.6)'}
+                    animate={idx === activeCert ? { scale: [1, 1.15, 1] } : { scale: 1 }}
+                    transition={{ repeat: idx === activeCert ? Infinity : 0, duration: 1.6 }}
+                    className="cursor-pointer"
+                    onClick={() => setActiveCert(idx)}
+                  />
+                  <text
+                    x={cert.x}
+                    y={cert.y - 6}
+                    textAnchor="middle"
+                    fill={idx <= activeCert ? 'rgba(226,232,240,0.95)' : 'rgba(148,163,184,0.7)'}
+                    style={{ fontSize: 2.7 }}
+                  >
+                    {cert.year}
+                  </text>
+                </g>
+              ))}
+            </svg>
+          </div>
         </div>
       </motion.section>
 

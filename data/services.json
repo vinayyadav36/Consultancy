@@ -7,6 +7,14 @@
       "category": "ecommerce_ops",
       "short_description": "Marketplace setup, listings, and backend operations for product businesses.",
       "detailed_description": "Launch and optimize Flipkart/Meesho and marketplace operations with catalog hygiene, pricing logic, and process discipline.",
+      "narrative_problem": "Founders had products but no reliable marketplace engine, causing inconsistent sales and poor visibility.",
+      "narrative_transformation": "We build a launch-to-scale operating rhythm with standardized catalog systems, execution SOPs, and revenue-focused listing strategy.",
+      "narrative_deliverables": [
+        "Marketplace brand setup",
+        "Catalog architecture and compliance checks",
+        "Operational weekly performance cadence"
+      ],
+      "prestige_indicator": "Marketplace Authority Sprint",
       "ideal_client": "For product-based businesses selling on marketplaces.",
       "starting_price_inr": 15000,
       "delivery_timeframe": "2 to 4 weeks",
@@ -15,7 +23,9 @@
         "Catalog, listing, and pricing strategy",
         "Order and fulfillment operations playbooks"
       ],
-      "is_featured": true
+      "is_featured": true,
+      "created_at": "2026-01-01T00:00:00.000Z",
+      "updated_at": "2026-01-01T00:00:00.000Z"
     },
     {
       "id": "svc-growth-marketing",
@@ -24,6 +34,14 @@
       "category": "marketing",
       "short_description": "Lead generation campaigns and content systems designed for conversion.",
       "detailed_description": "Build a practical growth engine with ad campaigns, landing pages, and short-form content tailored to your audience.",
+      "narrative_problem": "Brands were spending on ads without strong positioning, resulting in volatile lead quality.",
+      "narrative_transformation": "We transform acquisition into a governed growth system with testing loops, conversion narratives, and channel discipline.",
+      "narrative_deliverables": [
+        "Performance media architecture",
+        "Creative + funnel testing framework",
+        "Weekly insight-led optimization"
+      ],
+      "prestige_indicator": "Growth Intelligence Retainer",
       "ideal_client": "For D2C brands and local businesses ready to scale leads.",
       "starting_price_inr": 18000,
       "delivery_timeframe": "Monthly retainer",
@@ -32,7 +50,9 @@
         "Short-form content for Instagram and YouTube",
         "Landing pages and lead funnels"
       ],
-      "is_featured": true
+      "is_featured": true,
+      "created_at": "2026-01-01T00:00:00.000Z",
+      "updated_at": "2026-01-01T00:00:00.000Z"
     },
     {
       "id": "svc-brand-packaging",
@@ -41,6 +61,14 @@
       "category": "branding",
       "short_description": "Brand identity, packaging readiness, and conversion-first product presentation.",
       "detailed_description": "Define naming, story, and design direction while ensuring packaging and product documents are practical and marketplace-ready.",
+      "narrative_problem": "Businesses looked generic in crowded markets and struggled to communicate value with authority.",
+      "narrative_transformation": "We craft a premium identity framework so your brand communicates trust, relevance, and price confidence.",
+      "narrative_deliverables": [
+        "Brand strategy narrative",
+        "Visual language and packaging cues",
+        "Product story system for digital channels"
+      ],
+      "prestige_indicator": "Brand Authority Studio",
       "ideal_client": "For founders launching new products or repositioning existing brands.",
       "starting_price_inr": 22000,
       "delivery_timeframe": "3 to 6 weeks",
@@ -49,7 +77,9 @@
         "Packaging design support for shipping and compliance",
         "Conversion-focused product listing documentation"
       ],
-      "is_featured": false
+      "is_featured": false,
+      "created_at": "2026-01-01T00:00:00.000Z",
+      "updated_at": "2026-01-01T00:00:00.000Z"
     },
     {
       "id": "svc-compliance",
@@ -58,6 +88,14 @@
       "category": "compliance",
       "short_description": "Documentation and compliance support so businesses can sell confidently.",
       "detailed_description": "Organize compliance workflows across GST, HSN logic, Udyam, and FSSAI support to reduce operational bottlenecks.",
+      "narrative_problem": "Growth was blocked by fragmented compliance and documentation uncertainty.",
+      "narrative_transformation": "We establish a clean compliance backbone that protects operations and unlocks confident scaling.",
+      "narrative_deliverables": [
+        "Regulatory readiness checklist",
+        "Document control and audit trail",
+        "Compliance guidance workflow"
+      ],
+      "prestige_indicator": "Governance Essentials Desk",
       "ideal_client": "For retailers and food/product businesses needing compliant e-commerce operations.",
       "starting_price_inr": 12000,
       "delivery_timeframe": "1 to 3 weeks",
@@ -66,7 +104,9 @@
         "FSSAI process support",
         "Compliance checklist and documentation flow"
       ],
-      "is_featured": false
+      "is_featured": false,
+      "created_at": "2026-01-01T00:00:00.000Z",
+      "updated_at": "2026-01-01T00:00:00.000Z"
     },
     {
       "id": "svc-ai-automation",
@@ -75,6 +115,14 @@
       "category": "ai_automation",
       "short_description": "Simple internal automations and dashboards to save time and improve visibility.",
       "detailed_description": "Design practical automations and reporting views for sales, operations, and content workflows.",
+      "narrative_problem": "Teams were spending too much time on repeat tasks and operating without clear visibility.",
+      "narrative_transformation": "We design lightweight automation systems that elevate control, speed, and strategic clarity.",
+      "narrative_deliverables": [
+        "Automation map and workflow setup",
+        "Role-based KPI dashboarding",
+        "Operational visibility framework"
+      ],
+      "prestige_indicator": "Executive Automation Program",
       "ideal_client": "For SMB teams that need lean systems instead of enterprise complexity.",
       "starting_price_inr": 25000,
       "delivery_timeframe": "2 to 5 weeks",
@@ -83,7 +131,9 @@
         "Educational content and worksheet systems",
         "Sales and performance dashboard setup"
       ],
-      "is_featured": true
+      "is_featured": true,
+      "created_at": "2026-01-01T00:00:00.000Z",
+      "updated_at": "2026-01-01T00:00:00.000Z"
     }
   ]
 }

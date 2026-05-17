@@ -62,6 +62,31 @@ function sortByScore(serviceScores: Map<string, number>, services: Service[]): S
     .sort((a, b) => (serviceScores.get(b.id) || 0) - (serviceScores.get(a.id) || 0));
 }
 
+function normalizeService(service: Service): Service {
+  const now = new Date().toISOString();
+  return {
+    ...service,
+    narrative_problem: service.narrative_problem || service.short_description,
+    narrative_transformation: service.narrative_transformation || service.detailed_description,
+    narrative_deliverables: Array.isArray(service.narrative_deliverables) ? service.narrative_deliverables : service.highlights || [],
+    prestige_indicator: service.prestige_indicator || 'Private Growth Sprint',
+    created_at: service.created_at || now,
+    updated_at: service.updated_at || now,
+  };
+}
+
+function normalizeTestimonial(testimonial: Testimonial): Testimonial {
+  const now = new Date().toISOString();
+  return {
+    ...testimonial,
+    sector: testimonial.sector || 'General',
+    deliverables: Array.isArray(testimonial.deliverables) ? testimonial.deliverables : [],
+    approval_status: testimonial.approval_status || 'approved',
+    created_at: testimonial.created_at || now,
+    updated_at: testimonial.updated_at || now,
+  };
+}
+
 function verifyPassword(password: string, storedHash: string): boolean {
   const [salt, expectedHash] = storedHash.split(':');
   if (!salt || !expectedHash) {
@@ -100,12 +125,12 @@ app.get('/health', (_req, res) => {
 
 app.get('/api/services', async (_req, res) => {
   const db = await readJsonFile<ServicesStore>('services.json');
-  res.json(db.services);
+  res.json(db.services.map(normalizeService));
 });
 
 app.get('/api/testimonials', async (_req, res) => {
   const db = await readJsonFile<TestimonialsStore>('testimonials.json');
-  res.json(db.testimonials);
+  res.json(db.testimonials.map(normalizeTestimonial).filter((item) => item.approval_status === 'approved'));
 });
 
 app.post('/api/inquiries', async (req, res) => {
@@ -287,6 +312,52 @@ app.patch('/api/inquiries/:id', requireAdmin, adminLimiter, async (req, res) => 
   inquiry.updated_at = new Date().toISOString();
   await writeJsonFile('inquiries.json', db);
   res.json({ success: true, inquiry });
+});
+
+app.get('/api/admin/services', requireAdmin, adminLimiter, async (_req, res) => {
+  const db = await readJsonFile<ServicesStore>('services.json');
+  res.json(db.services.map(normalizeService));
+});
+
+app.patch('/api/admin/services/:id', requireAdmin, adminLimiter, async (req, res) => {
+  const db = await readJsonFile<ServicesStore>('services.json');
+  const service = db.services.find((item) => item.id === req.params.id);
+  if (!service) return res.status(404).json({ error: 'Service not found' });
+
+  const body = req.body as Partial<Service>;
+  service.short_description = typeof body.short_description === 'string' ? body.short_description : service.short_description;
+  service.detailed_description = typeof body.detailed_description === 'string' ? body.detailed_description : service.detailed_description;
+  service.narrative_problem = typeof body.narrative_problem === 'string' ? body.narrative_problem : service.narrative_problem;
+  service.narrative_transformation = typeof body.narrative_transformation === 'string' ? body.narrative_transformation : service.narrative_transformation;
+  service.prestige_indicator = typeof body.prestige_indicator === 'string' ? body.prestige_indicator : service.prestige_indicator;
+  service.narrative_deliverables = Array.isArray(body.narrative_deliverables) ? body.narrative_deliverables.map(String) : service.narrative_deliverables;
+  service.updated_at = new Date().toISOString();
+
+  await writeJsonFile('services.json', db);
+  res.json({ success: true, service: normalizeService(service) });
+});
+
+app.get('/api/admin/testimonials', requireAdmin, adminLimiter, async (_req, res) => {
+  const db = await readJsonFile<TestimonialsStore>('testimonials.json');
+  res.json(db.testimonials.map(normalizeTestimonial));
+});
+
+app.patch('/api/admin/testimonials/:id', requireAdmin, adminLimiter, async (req, res) => {
+  const db = await readJsonFile<TestimonialsStore>('testimonials.json');
+  const testimonial = db.testimonials.find((item) => item.id === req.params.id);
+  if (!testimonial) return res.status(404).json({ error: 'Testimonial not found' });
+
+  const body = req.body as Partial<Testimonial>;
+  testimonial.quote = typeof body.quote === 'string' ? body.quote : testimonial.quote;
+  testimonial.result_summary = typeof body.result_summary === 'string' ? body.result_summary : testimonial.result_summary;
+  testimonial.approval_status =
+    body.approval_status === 'pending' || body.approval_status === 'approved' || body.approval_status === 'archived'
+      ? body.approval_status
+      : testimonial.approval_status;
+  testimonial.updated_at = new Date().toISOString();
+
+  await writeJsonFile('testimonials.json', db);
+  res.json({ success: true, testimonial: normalizeTestimonial(testimonial) });
 });
 
 app.get('/api/admin/insights', requireAdmin, adminLimiter, async (_req, res) => {

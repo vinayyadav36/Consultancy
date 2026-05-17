@@ -103,13 +103,19 @@ const Services = () => {
                     <h2 className="mt-1 text-2xl font-semibold text-white group-hover:text-cyan-300 transition-colors">{service.name}</h2>
                   </div>
                 </div>
-                <p className="mt-3 text-sm text-slate-300 leading-relaxed">{service.short_description}</p>
+                <p className="mt-3 text-xs uppercase tracking-wider text-violet-300">{service.prestige_indicator}</p>
+                <p className="mt-3 text-sm text-slate-300 leading-relaxed">
+                  <span className="text-slate-500">Problem:</span> {service.narrative_problem}
+                </p>
+                <p className="mt-3 text-sm text-slate-300 leading-relaxed">
+                  <span className="text-slate-500">Transformation:</span> {service.narrative_transformation}
+                </p>
                 <p className="mt-3 text-sm text-slate-400">
-                  <span className="font-medium text-slate-200">Who it&apos;s for:</span> {service.ideal_client}
+                  <span className="font-medium text-slate-200">Best for:</span> {service.ideal_client}
                 </p>
 
                 <ul className="mt-4 space-y-2">
-                  {service.highlights.map((item) => (
+                  {service.narrative_deliverables.map((item) => (
                     <li key={item} className="text-sm text-slate-300 flex items-start gap-2">
                       <CheckCircle className="w-4 h-4 text-cyan-400 mt-0.5 shrink-0" />
                       {item}
