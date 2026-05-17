@@ -6,8 +6,13 @@ export interface Inquiry {
   business_name: string;
   business_stage: 'idea' | 'early' | 'growing' | 'established';
   services_interested: string[];
+  goals: string[];
+  monthly_budget_inr: number | null;
+  source_channel: 'website' | 'whatsapp' | 'referral' | 'other';
+  preferred_contact_time: string;
   message: string;
   status: 'new' | 'in_progress' | 'closed';
+  priority_score: number;
   admin_notes: string;
   created_at: string;
   updated_at: string;

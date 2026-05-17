@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowRight, CheckCircle, MessageCircle, TrendingUp, Users, Shield, Zap } from 'lucide-react';
+import { ArrowRight, CheckCircle, MessageCircle, TrendingUp, Users, Shield, Zap, Sparkles, BrainCircuit, Workflow, LineChart, ShieldCheck } from 'lucide-react';
 import { api, type Service, type Testimonial } from '../lib/api';
 
 const processSteps = [
@@ -31,6 +31,34 @@ const caseStudies = [
   { title: 'Student Founder', challenge: 'No structured go-to-market.', approach: 'Brand positioning + execution roadmap.', outcome: 'Turned into a registered, operational brand.' },
 ];
 
+const nextIndustryFeatures = [
+  {
+    title: 'Adaptive Strategy Engine',
+    desc: 'Business-stage aware recommendation layer connected to your real inquiry data.',
+    icon: BrainCircuit,
+  },
+  {
+    title: 'Culture-First Brand Story',
+    desc: 'Modern Indian visual language with region-aware storytelling and motifs.',
+    icon: Sparkles,
+  },
+  {
+    title: 'Automation-Ready Workflows',
+    desc: 'Lean process design so teams move fast without chaos.',
+    icon: Workflow,
+  },
+  {
+    title: 'Performance Intelligence',
+    desc: 'Simple scorecards and growth insights to support weekly decisions.',
+    icon: LineChart,
+  },
+  {
+    title: 'Trust & Compliance Layer',
+    desc: 'Growth with governance through GST/FSSAI aligned execution.',
+    icon: ShieldCheck,
+  },
+];
+
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
   whileInView: { opacity: 1, y: 0 },
@@ -49,6 +77,7 @@ const Home = () => {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [monthlyBudget, setMonthlyBudget] = useState(40000);
 
   useEffect(() => {
     void Promise.all([api.getServices(), api.getTestimonials()])
@@ -128,6 +157,50 @@ const Home = () => {
           </motion.div>
         </div>
       </section>
+
+      <motion.section {...fadeUp} className="container py-16 md:py-20">
+        <div className="glass-card p-8 md:p-10 border border-violet-400/15">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <p className="text-xs uppercase tracking-wider text-violet-300">Future-ready feature stack</p>
+              <h2 className="text-2xl md:text-3xl font-bold mt-2">Top 5 next-industry capabilities</h2>
+            </div>
+            <Link to="/contact" className="btn btn-violet gap-2">
+              Build my stack <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+          <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+            {nextIndustryFeatures.map((feature) => {
+              const Icon = feature.icon;
+              return (
+                <article key={feature.title} className="rounded-2xl border border-white/10 bg-white/5 p-4">
+                  <div className="w-10 h-10 rounded-xl bg-violet-400/15 border border-violet-400/25 flex items-center justify-center">
+                    <Icon className="w-5 h-5 text-violet-300" />
+                  </div>
+                  <h3 className="mt-3 text-sm font-semibold text-white">{feature.title}</h3>
+                  <p className="mt-1 text-xs text-slate-400">{feature.desc}</p>
+                </article>
+              );
+            })}
+          </div>
+          <div className="mt-7 rounded-xl border border-cyan-400/20 bg-cyan-500/5 p-4">
+            <p className="text-xs text-cyan-300">Smart growth projection</p>
+            <p className="mt-1 text-sm text-slate-300">
+              With a monthly execution budget of <span className="text-white font-semibold">₹{monthlyBudget.toLocaleString('en-IN')}</span>, 
+              projected opportunity uplift is <span className="text-emerald-300 font-semibold">₹{Math.round(monthlyBudget * 2.4).toLocaleString('en-IN')}</span> over 90 days.
+            </p>
+            <input
+              type="range"
+              min={10000}
+              max={200000}
+              step={5000}
+              value={monthlyBudget}
+              onChange={(e) => setMonthlyBudget(Number(e.target.value))}
+              className="mt-3 w-full accent-cyan-400"
+            />
+          </div>
+        </div>
+      </motion.section>
 
       <motion.section {...fadeUp} className="container py-16 md:py-20">
         <div className="text-center mb-12">

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { LogOut, RefreshCw, Search, Inbox, Clock, CheckCircle, Mail, Phone, User, Building2 } from 'lucide-react';
-import { api, type Inquiry } from '../lib/api';
+import { LogOut, RefreshCw, Search, Inbox, Clock, CheckCircle, Mail, Phone, User, Building2, Download, BrainCircuit } from 'lucide-react';
+import { api, type AdminInsights, type Inquiry } from '../lib/api';
 
 const LS_TOKEN = 'snma_admin_token';
 
@@ -15,6 +15,7 @@ const Admin = () => {
   const [inquiries, setInquiries] = useState<Inquiry[]>([]);
   const [filter, setFilter] = useState<'all' | Inquiry['status']>('all');
   const [search, setSearch] = useState('');
+  const [insights, setInsights] = useState<AdminInsights | null>(null);
 
   const loadInquiries = async () => {
     setLoading(true);
@@ -22,6 +23,8 @@ const Admin = () => {
     try {
       const data = await api.adminInquiries();
       setInquiries(data);
+      const insightData = await api.adminInsights();
+      setInsights(insightData);
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to load inquiries';
       setError(message);
@@ -61,6 +64,21 @@ const Admin = () => {
       await loadInquiries();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to update inquiry');
+    }
+  };
+
+  const exportJsonSnapshot = async () => {
+    try {
+      const snapshot = await api.adminExport();
+      const blob = new Blob([JSON.stringify(snapshot, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `consultancy-admin-export-${new Date().toISOString()}.json`;
+      link.click();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Export failed');
     }
   };
 
@@ -151,6 +169,13 @@ const Admin = () => {
             Refresh
           </button>
           <button
+            className="btn btn-violet text-sm px-4 py-2"
+            onClick={() => void exportJsonSnapshot()}
+          >
+            <Download className="w-4 h-4 mr-1.5" />
+            Export JSON
+          </button>
+          <button
             className="btn bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 text-sm px-4 py-2 rounded-xl transition-all"
             onClick={() => { localStorage.removeItem(LS_TOKEN); setToken(null); }}
           >
@@ -175,6 +200,33 @@ const Admin = () => {
           </div>
         ))}
       </div>
+
+      {insights && (
+        <div className="glass-card p-5 mb-6">
+          <div className="flex items-center gap-2 mb-3">
+            <BrainCircuit className="w-4 h-4 text-violet-300" />
+            <p className="text-sm font-semibold text-white">Smart Insights</p>
+          </div>
+          <div className="grid gap-3 md:grid-cols-3">
+            <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+              <p className="text-xs text-slate-400">Average Priority</p>
+              <p className="text-lg font-semibold text-cyan-300">{insights.average_priority}/100</p>
+            </div>
+            <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+              <p className="text-xs text-slate-400">Top Stage</p>
+              <p className="text-lg font-semibold text-violet-300">
+                {Object.entries(insights.by_stage).sort((a, b) => b[1] - a[1])[0]?.[0] || 'n/a'}
+              </p>
+            </div>
+            <div className="rounded-xl border border-white/10 bg-white/5 p-3">
+              <p className="text-xs text-slate-400">Top Requested Service</p>
+              <p className="text-sm font-semibold text-emerald-300">
+                {insights.top_services[0]?.service || 'n/a'}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="flex flex-wrap items-center gap-3 mb-6">
         <div className="relative flex-1 min-w-[200px] max-w-xs">
@@ -249,6 +301,9 @@ const Admin = () => {
               <div className="md:col-span-2 space-y-3">
                 <div className="flex items-start justify-between gap-3">
                   <div>{getStatusBadge(inquiry.status)}</div>
+                  <span className="text-xs px-2 py-1 rounded-full border border-violet-400/30 bg-violet-500/10 text-violet-200">
+                    Priority {inquiry.priority_score || 0}
+                  </span>
                 </div>
                 <p className="text-sm text-slate-300 bg-white/5 rounded-xl p-4 leading-relaxed">{inquiry.message}</p>
 

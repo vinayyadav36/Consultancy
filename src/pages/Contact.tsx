@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, MessageCircle, Send, CheckCircle, AlertCircle } from 'lucide-react';
-import { api, type InquiryPayload, type Service } from '../lib/api';
+import { Mail, Phone, MapPin, MessageCircle, Send, CheckCircle, AlertCircle, Sparkles } from 'lucide-react';
+import { api, type InquiryPayload, type Service, type StrategyRecommendationResponse } from '../lib/api';
 
 const initialForm: InquiryPayload = {
   name: '',
@@ -10,14 +10,27 @@ const initialForm: InquiryPayload = {
   business_name: '',
   business_stage: 'idea',
   services_interested: [],
+  goals: [],
+  monthly_budget_inr: null,
+  source_channel: 'website',
+  preferred_contact_time: 'Anytime',
   message: '',
 };
+
+const growthGoals = [
+  'Increase qualified leads',
+  'Improve brand positioning',
+  'Launch on marketplaces',
+  'Automate repetitive tasks',
+  'Compliance readiness (GST/FSSAI)',
+];
 
 const Contact = () => {
   const [form, setForm] = useState<InquiryPayload>(initialForm);
   const [services, setServices] = useState<Service[]>([]);
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [recommendation, setRecommendation] = useState<StrategyRecommendationResponse | null>(null);
 
   useEffect(() => {
     void api.getServices().then(setServices).catch(() => undefined);
@@ -31,6 +44,15 @@ const Contact = () => {
       services_interested: prev.services_interested.includes(name)
         ? prev.services_interested.filter((item) => item !== name)
         : [...prev.services_interested, name],
+    }));
+  };
+
+  const toggleGoal = (goal: string) => {
+    setForm((prev) => ({
+      ...prev,
+      goals: prev.goals.includes(goal)
+        ? prev.goals.filter((item) => item !== goal)
+        : [...prev.goals, goal],
     }));
   };
 
@@ -58,6 +80,20 @@ const Contact = () => {
       setErrors({});
     } catch {
       setStatus('error');
+    }
+  };
+
+  const runRecommendation = async () => {
+    try {
+      const result = await api.strategyRecommend({
+        business_stage: form.business_stage,
+        goals: form.goals,
+        monthly_budget_inr: form.monthly_budget_inr,
+        services_interested: form.services_interested,
+      });
+      setRecommendation(result);
+    } catch {
+      setRecommendation(null);
     }
   };
 
@@ -180,7 +216,7 @@ const Contact = () => {
           <div className="lg:col-span-3">
             <div className="glass-card p-6 md:p-8">
               <h2 className="text-2xl font-semibold text-white">Get a Quotation</h2>
-              <p className="mt-1 text-sm text-slate-400">Fill in the details and we&apos;ll get back to you.</p>
+              <p className="mt-1 text-sm text-slate-400">Fill in details, get instant smart strategy, and we&apos;ll follow up.</p>
 
               <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
                 <div className="grid gap-4 sm:grid-cols-2">
@@ -238,6 +274,39 @@ const Contact = () => {
                 </select>
 
                 <div>
+                  <p className="text-sm text-slate-300 mb-2">Primary growth goals</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {growthGoals.map((goal) => (
+                      <label
+                        key={goal}
+                        className={`flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm cursor-pointer transition-all duration-200 ${
+                          form.goals.includes(goal)
+                            ? 'bg-violet-400/10 border border-violet-400/30 text-violet-200'
+                            : 'bg-white/5 border border-white/5 text-slate-300 hover:bg-white/10'
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={form.goals.includes(goal)}
+                          onChange={() => toggleGoal(goal)}
+                          className="sr-only"
+                        />
+                        <div className={`w-4 h-4 rounded border-2 flex items-center justify-center transition-colors ${
+                          form.goals.includes(goal)
+                            ? 'bg-violet-400 border-violet-400'
+                            : 'border-slate-600'
+                        }`}>
+                          {form.goals.includes(goal) && (
+                            <CheckCircle className="w-3 h-3 text-white" />
+                          )}
+                        </div>
+                        {goal}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
                   <p className="text-sm text-slate-300 mb-2">What do you need help with?</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {serviceOptions.map((service) => (
@@ -270,6 +339,45 @@ const Contact = () => {
                   </div>
                 </div>
 
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <input
+                      className={inputClass('monthly_budget_inr')}
+                      type="number"
+                      min={0}
+                      placeholder="Monthly budget in INR (optional)"
+                      value={form.monthly_budget_inr ?? ''}
+                      onChange={(e) =>
+                        setForm({
+                          ...form,
+                          monthly_budget_inr: e.target.value ? Number(e.target.value) : null,
+                        })
+                      }
+                    />
+                  </div>
+                  <select
+                    className={inputClass('source_channel')}
+                    value={form.source_channel}
+                    onChange={(e) => setForm({ ...form, source_channel: e.target.value as InquiryPayload['source_channel'] })}
+                  >
+                    <option value="website">Source: Website</option>
+                    <option value="whatsapp">Source: WhatsApp</option>
+                    <option value="referral">Source: Referral</option>
+                    <option value="other">Source: Other</option>
+                  </select>
+                </div>
+
+                <select
+                  className={inputClass('preferred_contact_time')}
+                  value={form.preferred_contact_time}
+                  onChange={(e) => setForm({ ...form, preferred_contact_time: e.target.value })}
+                >
+                  <option value="Anytime">Preferred contact: Anytime</option>
+                  <option value="Morning">Preferred contact: Morning</option>
+                  <option value="Afternoon">Preferred contact: Afternoon</option>
+                  <option value="Evening">Preferred contact: Evening</option>
+                </select>
+
                 <div>
                   <textarea
                     className={`${inputClass('message')} min-h-32 resize-y`}
@@ -279,6 +387,36 @@ const Contact = () => {
                   />
                   {errors.message && <p className="mt-1 text-xs text-red-400">{errors.message}</p>}
                 </div>
+
+                <button
+                  type="button"
+                  className="btn btn-violet w-full gap-2"
+                  onClick={() => void runRecommendation()}
+                >
+                  <Sparkles className="w-4 h-4" />
+                  Get instant strategy recommendation
+                </button>
+
+                {recommendation && (
+                  <div className="rounded-2xl border border-violet-400/20 bg-violet-500/5 p-4">
+                    <p className="text-xs uppercase tracking-wider text-violet-300">AI Strategy Snapshot</p>
+                    <div className="mt-2 flex flex-wrap gap-2 text-sm">
+                      <span className="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-slate-200">
+                        Readiness Score: {recommendation.readiness_score}/100
+                      </span>
+                      <span className="px-2.5 py-1 rounded-full bg-cyan-400/10 border border-cyan-400/30 text-cyan-300">
+                        Plan: {recommendation.plan_tier.replace('_', ' ')}
+                      </span>
+                    </div>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {recommendation.recommended_services.map((service) => (
+                        <span key={service.id} className="text-xs px-2 py-1 rounded-full border border-violet-400/25 text-violet-200">
+                          {service.name}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 <button
                   className="btn btn-primary w-full gap-2"

@@ -76,8 +76,13 @@ export interface Inquiry {
   business_name: string;
   business_stage: 'idea' | 'early' | 'growing' | 'established';
   services_interested: string[];
+  goals: string[];
+  monthly_budget_inr: number | null;
+  source_channel: 'website' | 'whatsapp' | 'referral' | 'other';
+  preferred_contact_time: string;
   message: string;
   status: 'new' | 'in_progress' | 'closed';
+  priority_score: number;
   admin_notes: string;
   created_at: string;
   updated_at: string;
@@ -90,6 +95,10 @@ export interface InquiryPayload {
   business_name: string;
   business_stage: 'idea' | 'early' | 'growing' | 'established';
   services_interested: string[];
+  goals: string[];
+  monthly_budget_inr: number | null;
+  source_channel: 'website' | 'whatsapp' | 'referral' | 'other';
+  preferred_contact_time: string;
   message: string;
 }
 
@@ -99,6 +108,29 @@ export interface AdminLoginResponse {
     id: string;
     username: string;
   };
+}
+
+export interface StrategyRecommendationResponse {
+  plan_tier: 'launch_mode' | 'growth_mode' | 'scale_mode';
+  readiness_score: number;
+  recommended_services: Service[];
+}
+
+export interface AdminInsights {
+  total: number;
+  by_status: {
+    new: number;
+    in_progress: number;
+    closed: number;
+  };
+  by_stage: {
+    idea: number;
+    early: number;
+    growing: number;
+    established: number;
+  };
+  average_priority: number;
+  top_services: Array<{ service: string; count: number }>;
 }
 
 export const api = {
@@ -111,4 +143,8 @@ export const api = {
   adminInquiries: () => request<Inquiry[]>('GET', '/api/inquiries'),
   adminUpdateInquiry: (id: string, data: Partial<Pick<Inquiry, 'status' | 'admin_notes'>>) =>
     request<{ success: boolean; inquiry: Inquiry }>('PATCH', `/api/inquiries/${id}`, data),
+  strategyRecommend: (payload: Pick<InquiryPayload, 'business_stage' | 'goals' | 'monthly_budget_inr' | 'services_interested'>) =>
+    request<StrategyRecommendationResponse>('POST', '/api/strategy/recommend', payload),
+  adminInsights: () => request<AdminInsights>('GET', '/api/admin/insights'),
+  adminExport: () => request<Record<string, unknown>>('GET', '/api/admin/export'),
 };

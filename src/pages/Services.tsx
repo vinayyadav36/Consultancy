@@ -17,6 +17,7 @@ const Services = () => {
   const [services, setServices] = useState<Service[]>([]);
   const [activeFilter, setActiveFilter] = useState('all');
   const [loading, setLoading] = useState(true);
+  const [shortlist, setShortlist] = useState<Service[]>([]);
 
   useEffect(() => {
     void api.getServices()
@@ -29,6 +30,15 @@ const Services = () => {
     () => activeFilter === 'all' ? services : services.filter((s) => s.category === activeFilter),
     [services, activeFilter]
   );
+
+  const toggleShortlist = (service: Service) => {
+    setShortlist((current) => {
+      const exists = current.some((item) => item.id === service.id);
+      if (exists) return current.filter((item) => item.id !== service.id);
+      if (current.length >= 3) return [...current.slice(1), service];
+      return [...current, service];
+    });
+  };
 
   return (
     <div>
@@ -125,6 +135,17 @@ const Services = () => {
                     Book a call <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
+                <button
+                  type="button"
+                  onClick={() => toggleShortlist(service)}
+                  className={`mt-3 w-full rounded-xl px-3 py-2 text-xs border transition-all ${
+                    shortlist.some((item) => item.id === service.id)
+                      ? 'border-violet-400/40 bg-violet-400/10 text-violet-200'
+                      : 'border-white/10 bg-white/5 text-slate-300 hover:bg-white/10'
+                  }`}
+                >
+                  {shortlist.some((item) => item.id === service.id) ? 'Added to compare' : 'Add to compare'}
+                </button>
               </motion.article>
             ))}
           </div>
@@ -136,6 +157,23 @@ const Services = () => {
           </div>
         )}
       </section>
+
+      {shortlist.length > 0 && (
+        <section className="container pb-12">
+          <div className="glass-card p-5 md:p-6">
+            <h3 className="text-lg font-semibold text-white">Smart Compare (up to 3)</h3>
+            <div className="mt-4 grid gap-3 md:grid-cols-3">
+              {shortlist.map((item) => (
+                <article key={item.id} className="rounded-xl border border-violet-400/20 bg-violet-500/5 p-4">
+                  <p className="text-sm font-semibold text-white">{item.name}</p>
+                  <p className="text-xs text-slate-400 mt-1">{item.delivery_timeframe}</p>
+                  <p className="text-xs text-cyan-300 mt-2">₹{item.starting_price_inr.toLocaleString('en-IN')}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       <section className="container pb-16 md:pb-20">
         <div className="glass-card p-10 md:p-16 text-center relative overflow-hidden">

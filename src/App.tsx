@@ -13,7 +13,7 @@ function App() {
 
   return (
     <Router>
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col culture-motif">
         <Navbar />
         <main className="flex-grow pt-16 md:pt-20">
           <Routes>
